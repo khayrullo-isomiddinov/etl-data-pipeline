@@ -41,9 +41,13 @@ Production-ready **ETL & analytics pipeline** for image and label data — repro
 
 ### **Task 5 — Analytics Queries**
 - Implemented SQL queries in `sql/analytics/`:
-  1. **Images without labels**
-  2. **Top 2 label classes per image by size**
-  3. **Image(s) with the most labels ≥ 0.6**
+
+| # | Description |
+| :-- | :---------- |
+| 1 | **Images without labels** |
+| 2 | **Top 2 label classes per image by size** |
+| 3 | **Image(s) with the most labels ≥ 0.6** |
+
 - Added `scripts/run_analytics.py` → saves query results into CSVs under `reports/`.
 - Added `scripts/create_views.py` to provide SQL views:
   - `v_images_without_labels`
@@ -64,5 +68,3 @@ Everything is containerized for easy reproducibility:
 
 ```bash
 make all
-```
-
