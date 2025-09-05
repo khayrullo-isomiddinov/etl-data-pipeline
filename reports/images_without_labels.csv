@@ -1,0 +1,3 @@
+record_file_name,timestamp,image_path,country
+germany_berlin_20211010,40,my_server/my_folder/germany_berlin_20211010_40,DE
+hungary_budapest_20220222,30,my_server/my_folder/hungary_budapest_20220222_30,HU

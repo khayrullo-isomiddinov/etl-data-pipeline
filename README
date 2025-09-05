@@ -1,0 +1,69 @@
+# AUMOVIO Data Engineering Task
+
+Thank you very much for taking the time to review my application.  
+This repository contains my full solution to the **AUMOVIO backend / ETL assignment**.
+
+---
+
+## What I Did
+
+### **Task 1 — Papaya Loader**
+- Created the database tables from the provided `images.sql` and `labels.sql`.  
+- Implemented `scripts/create_db.py` to build the schema in `databases/db_labels.db`.  
+- Built an ETL loader `scripts/load_papaya.py` that:
+  - Reads the Papaya CSVs (`papaya_output_images.csv`, `papaya_output_labels.csv`).  
+  - Handles BOM, semicolon delimiters, and decimal commas (`0,5 → 0.5`).  
+  - Normalizes `country` into ISO-3166 alpha-2 codes.  
+  - Inserts rows **delta-safe** (no duplicates on re-run).  
+- Added unit tests under `tests/` verifying schema, counts, and delta behavior.
+
+---
+
+### **Task 2 — Kumquat Loader**
+- Created `scripts/load_kumquat.py` with the same ETL pipeline.  
+- Supports normalization and delta loading.  
+- Verified with tests that repeated runs do not create duplicates.
+
+---
+
+### **Task 3 — Deduplication by Version**
+- Implemented `scripts/dedup_labels.py`.  
+- Ensures that for each `(record_file_name, timestamp)` only the **highest version** of labels remains.  
+- Transaction-safe, idempotent, and tested.
+
+---
+
+### **Task 4 — Country Normalization**
+- Added `scripts/mapping.py` to map free-form country names/aliases into ISO alpha-2 codes.  
+- Applied automatically during Papaya + Kumquat loads.  
+- Tests confirm all `images.country` values are valid 2-letter codes.
+
+---
+
+### **Task 5 — Analytics Queries**
+- Implemented SQL queries in `sql/analytics/`:
+  1. **Images without labels**  
+  2. **Top 2 label classes per image by size**  
+  3. **Image(s) with the most labels ≥ 0.6**  
+- Added `scripts/run_analytics.py` → saves query results into CSVs under `reports/`.  
+- Added `scripts/create_views.py` to provide SQL views:
+  - `v_images_without_labels`  
+  - `v_top2_labels_per_image`  
+  - `v_most_labels_ge_0_6`
+
+---
+
+## Dockerization
+
+To make everything easy and reproducible:
+
+- **Dockerfile** → builds a Python 3.11 image with SQLite + dependencies.  
+- **docker-compose.yml** → mounts project folders so data/DB/reports persist on host.  
+- **Makefile** → short aliases for all tasks.
+
+### Example commands
+
+```bash
+# Build image and run the complete workflow:
+# (init DB → load Papaya & Kumquat → dedup → analytics → reports/)
+make all

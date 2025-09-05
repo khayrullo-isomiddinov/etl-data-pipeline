@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  aumovio:
+    build: .
+    working_dir: /app
+    volumes:
+      - ./raw_data:/app/raw_data:ro
+      - ./sql:/app/sql:ro
+      - ./scripts:/app/scripts:ro
+      - ./databases:/app/databases
+      - ./reports:/app/reports
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+    command: ["python", "-c", "print('AUMOVIO container ready')"]
