@@ -62,7 +62,7 @@ Everything is containerized for easy reproducibility:
 
 ### One-shot command
 
-```
+```bash
 make all
 ```
 
